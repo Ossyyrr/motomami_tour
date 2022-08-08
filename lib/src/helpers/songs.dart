@@ -1,7 +1,6 @@
 import 'package:music_player/src/helpers/lyrics.dart';
-import 'package:music_player/src/models/song_model.dart';
 
-final _songs = [
+final allSongs = [
   {
     'mp3': 'assets/1-saoko.mp3',
     'title': 'SAOKO',
@@ -99,12 +98,3 @@ final _songs = [
     'image': '16.jpeg',
   },
 ];
-
-List<Song> getSongs() {
-  List<Song> songList = [];
-  for (var song in _songs) {
-    songList.add(Song.fromMap(song));
-  }
-
-  return songList;
-}

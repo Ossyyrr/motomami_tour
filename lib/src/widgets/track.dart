@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/src/bloc/song_selector_bloc.dart';
 import 'package:music_player/src/models/audioplayer_model.dart';
 import 'package:music_player/src/models/song_model.dart';
 import 'package:provider/provider.dart';
@@ -8,19 +10,32 @@ class Track extends StatelessWidget {
     Key? key,
     required this.song,
     required this.index,
+    this.isDeletedSong = false,
   }) : super(key: key);
   final Song song;
   final int index;
+  final bool isDeletedSong;
   @override
   Widget build(BuildContext context) {
     final audioPlayerModel = Provider.of<AudioPlayerModel>(context);
     bool isSelected = audioPlayerModel.currentSong == index;
     return GestureDetector(
       onTap: () {
-        final audioPlayerModel = Provider.of<AudioPlayerModel>(context, listen: false);
-        audioPlayerModel.currentSong = index;
-        audioPlayerModel.assetAudioPlayer.playlistPlayAtIndex(index);
-        print('TRACK: ' + song.title);
+        final songSelector = BlocProvider.of<SongSelectorBloc>(context, listen: false);
+
+        if (songSelector.state.isMultiSelect) {
+          // TODO Add to list
+          if (isDeletedSong) {
+            audioPlayerModel.addSong(song);
+          } else {
+            audioPlayerModel.deleteSong(song);
+          }
+        } else {
+          final audioPlayerModel = Provider.of<AudioPlayerModel>(context, listen: false);
+          audioPlayerModel.currentSong = index;
+          audioPlayerModel.assetAudioPlayer.playlistPlayAtIndex(index);
+          print('TRACK: ' + song.title);
+        }
       },
       child: AnimatedScale(
         duration: const Duration(milliseconds: 100),

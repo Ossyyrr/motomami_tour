@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/src/bloc/song_selector_bloc.dart';
 import 'package:music_player/src/models/audioplayer_model.dart';
 import 'package:music_player/src/widgets/background.dart';
 import 'package:music_player/src/widgets/disco_image.dart';
@@ -7,6 +9,7 @@ import 'package:music_player/src/widgets/play_button.dart';
 import 'package:music_player/src/widgets/progress_bar.dart';
 import 'package:music_player/src/widgets/scroll_track.dart';
 import 'package:music_player/src/widgets/title_track.dart';
+import 'package:music_player/src/widgets/track.dart';
 import 'package:provider/provider.dart';
 
 class MusicPlayerPage extends StatelessWidget {
@@ -14,49 +17,86 @@ class MusicPlayerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final audioPlayerModel = Provider.of<AudioPlayerModel>(context);
-
-    return Scaffold(
-        body: SafeArea(
-      child: Column(
-        children: [
-          Stack(
+    return Scaffold(body: SafeArea(
+      child: BlocBuilder<SongSelectorBloc, SongSelectorState>(
+        builder: (context, state) {
+          final audioPlayerModel = Provider.of<AudioPlayerModel>(context);
+          print(state);
+          return Column(
             children: [
-              const Background(),
-              Column(
+              Stack(
                 children: [
-                  const ScrollTrack(),
-                  const SizedBox(height: 38),
-                  SizedBox(
-                    height: 350,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const DiscoImage(),
-                            TitleTrack(songs: audioPlayerModel.songs),
-                          ],
+                  const Background(),
+                  Column(
+                    children: [
+                      const ScrollTrack(),
+                      const SizedBox(height: 38),
+                      //  SizedBox(height: 120, child: Track(song: audioPlayerModel.songs[0], index: 0)),
+                      if (state is ActiveMultiselectState)
+                        SizedBox(
+                          width: double.infinity,
+                          height: 600,
+                          child: ListView(
+                            children: [
+                              Center(
+                                child: Wrap(
+                                  spacing: 8.0, // gap between adjacent chips
+                                  runSpacing: 8.0, // gap between lines
+
+                                  children: audioPlayerModel.deletedSongs
+                                      .asMap()
+                                      .map(
+                                        (i, song) => MapEntry(
+                                          i,
+                                          SizedBox(
+                                              height: 120,
+                                              child: Track(
+                                                song: song,
+                                                index: i,
+                                                isDeletedSong: true,
+                                              )),
+                                        ),
+                                      )
+                                      .values
+                                      .toList(),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        const SizedBox(),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            ProgressBar(),
-                            PlayButton(),
-                          ],
+                      if (state is DeactiveMultiselectState)
+                        SizedBox(
+                          height: 350,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const DiscoImage(),
+                                  TitleTrack(songs: audioPlayerModel.songs),
+                                ],
+                              ),
+                              const SizedBox(),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: const [
+                                  ProgressBar(),
+                                  PlayButton(),
+                                ],
+                              ),
+                              const SizedBox(),
+                            ],
+                          ),
                         ),
-                        const SizedBox(),
-                      ],
-                    ),
+                    ],
                   ),
                 ],
               ),
+              if (state is DeactiveMultiselectState) const Expanded(child: Lyrics()),
             ],
-          ),
-          const Expanded(child: Lyrics()),
-        ],
+          );
+        },
       ),
     ));
   }
