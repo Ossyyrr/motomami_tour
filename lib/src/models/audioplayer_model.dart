@@ -1,6 +1,6 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:music_player/src/helpers/songs.dart';
+import 'package:music_player/src/helpers/motomami_disk.dart';
 import 'package:music_player/src/models/song_model.dart';
 
 class AudioPlayerModel with ChangeNotifier {
@@ -83,7 +83,7 @@ class AudioPlayerModel with ChangeNotifier {
 
   List<Song> getAllSongs() {
     List<Song> songList = [];
-    for (var song in allSongs) {
+    for (var song in motomamiDisk) {
       songList.add(Song.fromMap(song));
     }
 

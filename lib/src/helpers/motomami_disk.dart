@@ -1,6 +1,6 @@
-import 'package:music_player/src/helpers/lyrics.dart';
+import 'package:music_player/src/helpers/lyrics_motomami.dart';
 
-final allSongs = [
+final motomamiDisk = [
   {
     'mp3': 'assets/1-saoko.mp3',
     'title': 'SAOKO',
