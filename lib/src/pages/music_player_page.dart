@@ -32,66 +32,8 @@ class MusicPlayerPage extends StatelessWidget {
                         children: [
                           const ScrollTrack(),
                           const SizedBox(height: 38),
-                          if (state is ActiveMultiselectState)
-                            SizedBox(
-                              width: double.infinity,
-                              height: MediaQuery.of(context).size.height - 200,
-                              child: ListView(
-                                physics: const BouncingScrollPhysics(),
-                                scrollDirection: Axis.horizontal,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(38.0),
-                                    child: Wrap(
-                                      direction: Axis.vertical,
-                                      spacing: 16,
-                                      runSpacing: 16,
-                                      children: audioPlayerModel.deletedSongs
-                                          .asMap()
-                                          .map(
-                                            (i, song) => MapEntry(
-                                              i,
-                                              SizedBox(
-                                                  height: 120,
-                                                  child: Track(
-                                                    song: song,
-                                                    index: i,
-                                                    isDeletedSong: true,
-                                                  )),
-                                            ),
-                                          )
-                                          .values
-                                          .toList(),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          if (state is DeactiveMultiselectState)
-                            SizedBox(
-                              height: 350,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const DiscoImage(),
-                                      TitleTrack(songs: audioPlayerModel.songs),
-                                    ],
-                                  ),
-                                  const SizedBox(),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: const [
-                                      ProgressBar(),
-                                      PlayButton(),
-                                    ],
-                                  ),
-                                  const SizedBox(),
-                                ],
-                              ),
-                            ),
+                          if (state is ActiveMultiselectState) GridZone(audioPlayerModel: audioPlayerModel),
+                          if (state is DeactiveMultiselectState) _DiscZone(audioPlayerModel: audioPlayerModel),
                         ],
                       ),
                     ],
@@ -99,24 +41,118 @@ class MusicPlayerPage extends StatelessWidget {
                   if (state is DeactiveMultiselectState) const Expanded(child: Lyrics()),
                 ],
               ),
-              if (state is ActiveMultiselectState)
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Text(
-                      'for Camilo',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.white.withOpacity(0.4),
-                      ),
-                    ),
-                  ),
-                )
+              if (state is ActiveMultiselectState) const _ForCamilo()
             ],
           );
         },
       ),
     ));
+  }
+}
+
+class _ForCamilo extends StatelessWidget {
+  const _ForCamilo({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Text(
+          'for Camilo',
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.white.withOpacity(0.4),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DiscZone extends StatelessWidget {
+  const _DiscZone({
+    Key? key,
+    required this.audioPlayerModel,
+  }) : super(key: key);
+
+  final AudioPlayerModel audioPlayerModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 350,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const DiscoImage(),
+              TitleTrack(songs: audioPlayerModel.songs),
+            ],
+          ),
+          const SizedBox(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              ProgressBar(),
+              PlayButton(),
+            ],
+          ),
+          const SizedBox(),
+        ],
+      ),
+    );
+  }
+}
+
+class GridZone extends StatelessWidget {
+  const GridZone({
+    Key? key,
+    required this.audioPlayerModel,
+  }) : super(key: key);
+
+  final AudioPlayerModel audioPlayerModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height - 200,
+      child: ListView(
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(38.0),
+            child: Wrap(
+              direction: Axis.vertical,
+              spacing: 16,
+              runSpacing: 16,
+              children: audioPlayerModel.deletedSongs
+                  .asMap()
+                  .map(
+                    (i, song) => MapEntry(
+                      i,
+                      SizedBox(
+                          height: 120,
+                          child: Track(
+                            song: song,
+                            index: i,
+                            isDeletedSong: true,
+                          )),
+                    ),
+                  )
+                  .values
+                  .toList(),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

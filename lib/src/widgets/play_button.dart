@@ -90,6 +90,7 @@ class _PlayButtonState extends State<PlayButton> with SingleTickerProviderStateM
   void open() {
     final audioPlayerModel = Provider.of<AudioPlayerModel>(context, listen: false);
     List<Audio> audios = [];
+
     for (var song in audioPlayerModel.songs) {
       audios.add(Audio(song.mp3));
     }
@@ -97,6 +98,7 @@ class _PlayButtonState extends State<PlayButton> with SingleTickerProviderStateM
     audioPlayerModel.assetAudioPlayer.open(
       Playlist(audios: audios),
       loopMode: LoopMode.playlist,
+      autoStart: false,
     );
 
     audioPlayerModel.assetAudioPlayer.currentPosition.listen((duration) {
@@ -108,7 +110,6 @@ class _PlayButtonState extends State<PlayButton> with SingleTickerProviderStateM
     });
 
     audioPlayerModel.assetAudioPlayer.playlistAudioFinished.listen((event) {
-      print('AUDIO FINISHED');
       audioPlayerModel.currentSong = audioPlayerModel.currentSong + 1;
     });
   }
