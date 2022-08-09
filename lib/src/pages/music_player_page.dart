@@ -21,7 +21,6 @@ class MusicPlayerPage extends StatelessWidget {
       child: BlocBuilder<SongSelectorBloc, SongSelectorState>(
         builder: (context, state) {
           final audioPlayerModel = Provider.of<AudioPlayerModel>(context);
-          print(state);
           return Column(
             children: [
               Stack(
@@ -31,7 +30,6 @@ class MusicPlayerPage extends StatelessWidget {
                     children: [
                       const ScrollTrack(),
                       const SizedBox(height: 38),
-                      //  SizedBox(height: 120, child: Track(song: audioPlayerModel.songs[0], index: 0)),
                       if (state is ActiveMultiselectState)
                         SizedBox(
                           width: double.infinity,
@@ -44,9 +42,8 @@ class MusicPlayerPage extends StatelessWidget {
                                 padding: const EdgeInsets.all(38.0),
                                 child: Wrap(
                                   direction: Axis.vertical,
-                                  spacing: 16, // gap between adjacent chips
-                                  runSpacing: 16, // gap between lines
-
+                                  spacing: 16,
+                                  runSpacing: 16,
                                   children: audioPlayerModel.deletedSongs
                                       .asMap()
                                       .map(

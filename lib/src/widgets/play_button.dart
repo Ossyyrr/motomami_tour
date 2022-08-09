@@ -33,6 +33,8 @@ class _PlayButtonState extends State<PlayButton> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     final audioPlayerModel = Provider.of<AudioPlayerModel>(context);
 
+    print(audioPlayerModel.assetAudioPlayer.isPlaying.value);
+
     // TODO Colocar este código (Pausa o reactiva el disco al cambiar de canción mediante el provider.)
     if (audioPlayerModel.assetAudioPlayer.isPlaying.value) {
       playAnimation.forward(); // icono play
@@ -87,7 +89,6 @@ class _PlayButtonState extends State<PlayButton> with SingleTickerProviderStateM
 
   void open() {
     final audioPlayerModel = Provider.of<AudioPlayerModel>(context, listen: false);
-
     List<Audio> audios = [];
     for (var song in audioPlayerModel.songs) {
       audios.add(Audio(song.mp3));

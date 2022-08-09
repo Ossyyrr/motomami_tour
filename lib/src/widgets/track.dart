@@ -24,7 +24,6 @@ class Track extends StatelessWidget {
         final songSelector = BlocProvider.of<SongSelectorBloc>(context, listen: false);
 
         if (songSelector.state.isMultiSelect) {
-          // TODO Add to list
           if (isDeletedSong) {
             audioPlayerModel.addSong(song);
           } else {
@@ -52,14 +51,6 @@ class Track extends StatelessWidget {
                 ],
               ),
               borderRadius: BorderRadius.circular(10),
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: isSelected ? const Color(0xffec3f41).withOpacity(0.1) : Colors.transparent,
-              //     spreadRadius: 5,
-              //     blurRadius: 5,
-              //     offset: const Offset(0, -7), // changes position of shadow
-              //   ),
-              // ],
             ),
             width: 100,
             child: Column(
