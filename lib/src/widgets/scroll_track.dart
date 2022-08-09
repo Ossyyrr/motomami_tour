@@ -28,6 +28,7 @@ class ScrollTrack extends StatelessWidget {
                 child: IconButton(
                   icon: const Icon(Icons.apps),
                   onPressed: () {
+                    audioPlayerModel.currentSong = 0;
                     final songSelector = BlocProvider.of<SongSelectorBloc>(context, listen: false);
                     songSelector.add(ChangeMultiSelect(isMultiSelect: !songSelector.state.isMultiSelect));
                   },

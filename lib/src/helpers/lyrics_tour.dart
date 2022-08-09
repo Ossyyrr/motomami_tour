@@ -265,6 +265,12 @@ final dePlata = [
   "Ay, en la España aún hubiera",
 ];
 final laRelacionRemix = [
+  "Ahora todo cambió, le toca a ella",
+  "Latino gang",
+  "Ayer la vi perreando solita",
+  "Se ve má bonita",
+  "Ahora que no está con ese man",
+  "Que la felicidad como ropa se la quita",
   "Ella siempre estaba cuando tú no estabas",
   "Fue tanto dolor que ya no la mataba",
   "Poco a poco, ya no te necesitaba",

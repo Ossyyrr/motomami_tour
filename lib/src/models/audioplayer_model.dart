@@ -14,7 +14,7 @@ class AudioPlayerModel with ChangeNotifier {
 
   void addSong(Song song) {
     deletedSongs.remove(song);
-    songs.add(song);
+    songs.insert(0, song);
     _currentSong = 0;
     notifyListeners();
   }
@@ -22,7 +22,7 @@ class AudioPlayerModel with ChangeNotifier {
   void deleteSong(Song song) {
     print(songs.length);
     songs.remove(song);
-    deletedSongs.add(song);
+    deletedSongs.insert(0, song);
     _currentSong = 0;
     notifyListeners();
     print('DELETE: ' + song.title);
@@ -31,7 +31,6 @@ class AudioPlayerModel with ChangeNotifier {
 
   int _currentSong = 0;
   final assetAudioPlayer = AssetsAudioPlayer();
-
   bool _playing = false;
   Duration _songDuration = const Duration(milliseconds: 0);
   Duration _current = const Duration(milliseconds: 0);
@@ -54,6 +53,7 @@ class AudioPlayerModel with ChangeNotifier {
   }
 
   bool get playing => _playing;
+
   set playing(bool valor) {
     _playing = valor;
     notifyListeners();

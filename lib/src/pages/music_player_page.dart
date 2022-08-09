@@ -21,87 +21,138 @@ class MusicPlayerPage extends StatelessWidget {
       child: BlocBuilder<SongSelectorBloc, SongSelectorState>(
         builder: (context, state) {
           final audioPlayerModel = Provider.of<AudioPlayerModel>(context);
-          print(state);
-          return Column(
+          return Stack(
             children: [
-              Stack(
+              Column(
                 children: [
-                  const Background(),
-                  Column(
+                  Stack(
                     children: [
-                      const ScrollTrack(),
-                      const SizedBox(height: 38),
-                      //  SizedBox(height: 120, child: Track(song: audioPlayerModel.songs[0], index: 0)),
-                      if (state is ActiveMultiselectState)
-                        SizedBox(
-                          width: double.infinity,
-                          height: MediaQuery.of(context).size.height - 200,
-                          child: ListView(
-                            physics: const BouncingScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(38.0),
-                                child: Wrap(
-                                  direction: Axis.vertical,
-                                  spacing: 16, // gap between adjacent chips
-                                  runSpacing: 16, // gap between lines
-
-                                  children: audioPlayerModel.deletedSongs
-                                      .asMap()
-                                      .map(
-                                        (i, song) => MapEntry(
-                                          i,
-                                          SizedBox(
-                                              height: 120,
-                                              child: Track(
-                                                song: song,
-                                                index: i,
-                                                isDeletedSong: true,
-                                              )),
-                                        ),
-                                      )
-                                      .values
-                                      .toList(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      if (state is DeactiveMultiselectState)
-                        SizedBox(
-                          height: 350,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const DiscoImage(),
-                                  TitleTrack(songs: audioPlayerModel.songs),
-                                ],
-                              ),
-                              const SizedBox(),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: const [
-                                  ProgressBar(),
-                                  PlayButton(),
-                                ],
-                              ),
-                              const SizedBox(),
-                            ],
-                          ),
-                        ),
+                      const Background(),
+                      Column(
+                        children: [
+                          const ScrollTrack(),
+                          const SizedBox(height: 38),
+                          if (state is ActiveMultiselectState) GridZone(audioPlayerModel: audioPlayerModel),
+                          if (state is DeactiveMultiselectState) _DiscZone(audioPlayerModel: audioPlayerModel),
+                        ],
+                      ),
                     ],
                   ),
+                  if (state is DeactiveMultiselectState) const Expanded(child: Lyrics()),
                 ],
               ),
-              if (state is DeactiveMultiselectState) const Expanded(child: Lyrics()),
+              if (state is ActiveMultiselectState) const _ForCamilo()
             ],
           );
         },
       ),
     ));
+  }
+}
+
+class _ForCamilo extends StatelessWidget {
+  const _ForCamilo({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Text(
+          'for Camilo',
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.white.withOpacity(0.4),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DiscZone extends StatelessWidget {
+  const _DiscZone({
+    Key? key,
+    required this.audioPlayerModel,
+  }) : super(key: key);
+
+  final AudioPlayerModel audioPlayerModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 350,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const DiscoImage(),
+              TitleTrack(songs: audioPlayerModel.songs),
+            ],
+          ),
+          const SizedBox(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              ProgressBar(),
+              PlayButton(),
+            ],
+          ),
+          const SizedBox(),
+        ],
+      ),
+    );
+  }
+}
+
+class GridZone extends StatelessWidget {
+  const GridZone({
+    Key? key,
+    required this.audioPlayerModel,
+  }) : super(key: key);
+
+  final AudioPlayerModel audioPlayerModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height - 200,
+      child: ListView(
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(38.0),
+            child: Wrap(
+              direction: Axis.vertical,
+              spacing: 12,
+              runSpacing: 12,
+              children: audioPlayerModel.deletedSongs
+                  .asMap()
+                  .map(
+                    (i, song) => MapEntry(
+                      i,
+                      SizedBox(
+                          height: 120,
+                          child: Track(
+                            song: song,
+                            index: i,
+                            isDeletedSong: true,
+                          )),
+                    ),
+                  )
+                  .values
+                  .toList(),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
