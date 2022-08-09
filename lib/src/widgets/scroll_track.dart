@@ -22,11 +22,9 @@ class ScrollTrack extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           itemCount: audioPlayerModel.songs.length + 1,
           itemBuilder: (context, index) {
-            if (index != audioPlayerModel.songs.length) {
-              return Track(song: audioPlayerModel.songs[index], index: index);
-            } else {
+            if (index == 0) {
               return Padding(
-                padding: const EdgeInsets.only(bottom: 44, right: 8),
+                padding: const EdgeInsets.only(bottom: 44),
                 child: IconButton(
                   icon: const Icon(Icons.apps),
                   onPressed: () {
@@ -35,6 +33,8 @@ class ScrollTrack extends StatelessWidget {
                   },
                 ),
               );
+            } else {
+              return Track(song: audioPlayerModel.songs[index - 1], index: index - 1);
             }
           },
         ));

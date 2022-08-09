@@ -35,8 +35,9 @@ class MusicPlayerPage extends StatelessWidget {
                       if (state is ActiveMultiselectState)
                         SizedBox(
                           width: double.infinity,
-                          height: 600,
+                          height: MediaQuery.of(context).size.height - 200,
                           child: ListView(
+                            physics: const BouncingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
                             children: [
                               Padding(
