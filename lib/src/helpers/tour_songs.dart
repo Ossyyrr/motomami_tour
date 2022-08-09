@@ -62,6 +62,12 @@ final tourSongs = [
     'image': 'yoXTiTuXMi.jpeg',
   },
   {
+    'mp3': 'assets/despecha.mp3',
+    'title': 'Despechá',
+    'lyrics': despecha,
+    'image': 'despecha.jpeg',
+  },
+  {
     'mp3': 'assets/aislamiento.mp3',
     'title': 'Aislamiento',
     'lyrics': aislamiento,

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.music_player">
    <application
-        android:label="MOTOMAMI baby"
+        android:label="MOTOMAMI Tour"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

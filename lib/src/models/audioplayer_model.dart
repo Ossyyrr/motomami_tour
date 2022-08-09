@@ -1,12 +1,13 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/src/helpers/motomami_disk.dart';
+import 'package:music_player/src/helpers/tour_songs.dart';
 import 'package:music_player/src/models/song_model.dart';
 
 class AudioPlayerModel with ChangeNotifier {
   AudioPlayerModel() {
-    songs = getAllSongs();
-    deletedSongs = [];
+    songs = getMotomamiSongs();
+    deletedSongs = getTourSongs();
   }
   late final List<Song> songs;
   late final List<Song> deletedSongs;
@@ -81,12 +82,19 @@ class AudioPlayerModel with ChangeNotifier {
     return "$twoDigitMinutes:$twoDigitSeconds";
   }
 
-  List<Song> getAllSongs() {
+  List<Song> getMotomamiSongs() {
     List<Song> songList = [];
     for (var song in motomamiDisk) {
       songList.add(Song.fromMap(song));
     }
+    return songList;
+  }
 
+  List<Song> getTourSongs() {
+    List<Song> songList = [];
+    for (var song in tourSongs) {
+      songList.add(Song.fromMap(song));
+    }
     return songList;
   }
 }

@@ -37,11 +37,14 @@ class MusicPlayerPage extends StatelessWidget {
                           width: double.infinity,
                           height: 600,
                           child: ListView(
+                            scrollDirection: Axis.horizontal,
                             children: [
-                              Center(
+                              Padding(
+                                padding: const EdgeInsets.all(38.0),
                                 child: Wrap(
-                                  spacing: 8.0, // gap between adjacent chips
-                                  runSpacing: 8.0, // gap between lines
+                                  direction: Axis.vertical,
+                                  spacing: 16, // gap between adjacent chips
+                                  runSpacing: 16, // gap between lines
 
                                   children: audioPlayerModel.deletedSongs
                                       .asMap()
