@@ -131,8 +131,8 @@ class GridZone extends StatelessWidget {
             padding: const EdgeInsets.all(38.0),
             child: Wrap(
               direction: Axis.vertical,
-              spacing: 16,
-              runSpacing: 16,
+              spacing: 12,
+              runSpacing: 12,
               children: audioPlayerModel.deletedSongs
                   .asMap()
                   .map(
