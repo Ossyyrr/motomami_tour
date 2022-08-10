@@ -34,6 +34,7 @@ class AudioPlayerModel with ChangeNotifier {
   bool _playing = false;
   Duration _songDuration = const Duration(milliseconds: 0);
   Duration _current = const Duration(milliseconds: 0);
+  late AnimationController playAnimation;
 
   String get songTotalDuration => printDuration(songDuration);
   String get currentSecond => printDuration(current);
@@ -96,5 +97,57 @@ class AudioPlayerModel with ChangeNotifier {
       songList.add(Song.fromMap(song));
     }
     return songList;
+  }
+
+  void open() {
+    List<Audio> audios = [];
+
+    for (var song in songs) {
+      audios.add(Audio(song.mp3));
+    }
+
+    assetAudioPlayer.open(
+      Playlist(audios: audios),
+      loopMode: LoopMode.playlist,
+      autoStart: false,
+    );
+
+    assetAudioPlayer.currentPosition.listen((duration) {
+      current = duration;
+    });
+
+    assetAudioPlayer.current.listen((playingAudio) {
+      songDuration = playingAudio?.audio.duration ?? const Duration(seconds: 0);
+    });
+
+    assetAudioPlayer.playlistAudioFinished.listen((event) {
+      _currentSong = currentSong + 2;
+      _currentSong = currentSong - 1;
+      notifyListeners();
+    });
+    notifyListeners();
+  }
+
+  void onTapPlay() {
+    if (playing) {
+      playAnimation.reverse(); // icono play
+      imageDiscoController.stop(); // imagen disco
+      assetAudioPlayer.pause(); // musica
+      playing = false;
+    } else {
+      playAnimation.forward(); // icono play
+      imageDiscoController.repeat(); // imagen disco
+      assetAudioPlayer.play(); // musica
+      playing = true;
+    }
+    notifyListeners();
+  }
+
+  void onTapTrack() {
+    playAnimation.forward(); // icono play
+    imageDiscoController.repeat(); // imagen disco
+    assetAudioPlayer.play(); // musica
+    playing = true;
+    notifyListeners();
   }
 }

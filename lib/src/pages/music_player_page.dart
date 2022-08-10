@@ -50,6 +50,20 @@ class MusicPlayerPage extends StatelessWidget {
   }
 }
 
+// class ItemOpacity extends StatelessWidget {
+//   const ItemOpacity({Key? key, required this.show, required this.child}) : super(key: key);
+//   final bool show;
+//   final Widget child;
+//   @override
+//   Widget build(BuildContext context) {
+//     return AnimatedOpacity(
+//       duration: const Duration(milliseconds: 400),
+//       opacity: show ? 1 : 0.0,
+//       child: child,
+//     );
+//   }
+// }
+
 class _ForCamilo extends StatelessWidget {
   const _ForCamilo({
     Key? key,

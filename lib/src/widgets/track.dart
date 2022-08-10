@@ -33,7 +33,7 @@ class Track extends StatelessWidget {
           final audioPlayerModel = Provider.of<AudioPlayerModel>(context, listen: false);
           audioPlayerModel.currentSong = index;
           audioPlayerModel.assetAudioPlayer.playlistPlayAtIndex(index);
-          print('TRACK: ' + song.title);
+          audioPlayerModel.onTapTrack();
         }
       },
       child: AnimatedScale(

@@ -16,14 +16,17 @@ class Lyrics extends StatelessWidget {
         itemExtent: 40,
         diameterRatio: 2,
         children: audioPlayerModel.songs[audioPlayerModel.currentSong].lyrics
-            .map((linea) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      linea,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 20),
+            .map((linea) => SizedBox(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        linea,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 20),
+                      ),
                     ),
                   ),
                 ))
