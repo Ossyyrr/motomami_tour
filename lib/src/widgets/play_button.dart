@@ -16,9 +16,7 @@ class _PlayButtonState extends State<PlayButton> with SingleTickerProviderStateM
   void initState() {
     final audioPlayerModel = Provider.of<AudioPlayerModel>(context, listen: false);
     audioPlayerModel.playAnimation = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
-
     WidgetsBinding.instance.addPostFrameCallback((_) => audioPlayerModel.open());
-
     super.initState();
   }
 

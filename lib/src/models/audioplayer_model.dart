@@ -8,26 +8,10 @@ class AudioPlayerModel with ChangeNotifier {
   AudioPlayerModel() {
     songs = getMotomamiSongs();
     deletedSongs = getTourSongs();
+    listeners();
   }
   late final List<Song> songs;
   late final List<Song> deletedSongs;
-
-  void addSong(Song song) {
-    deletedSongs.remove(song);
-    songs.insert(0, song);
-    _currentSong = 0;
-    notifyListeners();
-  }
-
-  void deleteSong(Song song) {
-    print(songs.length);
-    songs.remove(song);
-    deletedSongs.insert(0, song);
-    _currentSong = 0;
-    notifyListeners();
-    print('DELETE: ' + song.title);
-    print(songs.length);
-  }
 
   int _currentSong = 0;
   final assetAudioPlayer = AssetsAudioPlayer();
@@ -111,7 +95,9 @@ class AudioPlayerModel with ChangeNotifier {
       loopMode: LoopMode.playlist,
       autoStart: false,
     );
+  }
 
+  void listeners() {
     assetAudioPlayer.currentPosition.listen((duration) {
       current = duration;
     });
@@ -121,11 +107,8 @@ class AudioPlayerModel with ChangeNotifier {
     });
 
     assetAudioPlayer.playlistAudioFinished.listen((event) {
-      _currentSong = currentSong + 2;
-      _currentSong = currentSong - 1;
-      notifyListeners();
+      _currentSong = currentSong + 1;
     });
-    notifyListeners();
   }
 
   void onTapPlay() {
@@ -148,6 +131,20 @@ class AudioPlayerModel with ChangeNotifier {
     imageDiscoController.repeat(); // imagen disco
     assetAudioPlayer.play(); // musica
     playing = true;
+    notifyListeners();
+  }
+
+  void addSong(Song song) {
+    deletedSongs.remove(song);
+    songs.insert(0, song);
+    _currentSong = 0;
+    notifyListeners();
+  }
+
+  void deleteSong(Song song) {
+    songs.remove(song);
+    deletedSongs.insert(0, song);
+    _currentSong = 0;
     notifyListeners();
   }
 }

@@ -32,8 +32,16 @@ class MusicPlayerPage extends StatelessWidget {
                         children: [
                           const ScrollTrack(),
                           const SizedBox(height: 38),
-                          if (state is ActiveMultiselectState) GridZone(audioPlayerModel: audioPlayerModel),
-                          if (state is DeactiveMultiselectState) _DiscZone(audioPlayerModel: audioPlayerModel),
+                          if (state is ActiveMultiselectState)
+                            GridZone(
+                              key: const ValueKey('grid'),
+                              audioPlayerModel: audioPlayerModel,
+                            ),
+                          if (state is DeactiveMultiselectState)
+                            _DiscZone(
+                              audioPlayerModel: audioPlayerModel,
+                              key: const ValueKey('disc'), //Evita que se genere una nueva instancia del widget
+                            ),
                         ],
                       ),
                     ],
