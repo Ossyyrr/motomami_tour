@@ -8,32 +8,17 @@ class AudioPlayerModel with ChangeNotifier {
   AudioPlayerModel() {
     songs = getMotomamiSongs();
     deletedSongs = getTourSongs();
+    listeners();
   }
   late final List<Song> songs;
   late final List<Song> deletedSongs;
-
-  void addSong(Song song) {
-    deletedSongs.remove(song);
-    songs.insert(0, song);
-    _currentSong = 0;
-    notifyListeners();
-  }
-
-  void deleteSong(Song song) {
-    print(songs.length);
-    songs.remove(song);
-    deletedSongs.insert(0, song);
-    _currentSong = 0;
-    notifyListeners();
-    print('DELETE: ' + song.title);
-    print(songs.length);
-  }
 
   int _currentSong = 0;
   final assetAudioPlayer = AssetsAudioPlayer();
   bool _playing = false;
   Duration _songDuration = const Duration(milliseconds: 0);
   Duration _current = const Duration(milliseconds: 0);
+  late AnimationController playAnimation;
 
   String get songTotalDuration => printDuration(songDuration);
   String get currentSecond => printDuration(current);
@@ -96,5 +81,70 @@ class AudioPlayerModel with ChangeNotifier {
       songList.add(Song.fromMap(song));
     }
     return songList;
+  }
+
+  void open() {
+    List<Audio> audios = [];
+
+    for (var song in songs) {
+      audios.add(Audio(song.mp3));
+    }
+
+    assetAudioPlayer.open(
+      Playlist(audios: audios),
+      loopMode: LoopMode.playlist,
+      autoStart: false,
+    );
+  }
+
+  void listeners() {
+    assetAudioPlayer.currentPosition.listen((duration) {
+      current = duration;
+    });
+
+    assetAudioPlayer.current.listen((playingAudio) {
+      songDuration = playingAudio?.audio.duration ?? const Duration(seconds: 0);
+    });
+
+    assetAudioPlayer.playlistAudioFinished.listen((event) {
+      _currentSong = currentSong + 1;
+    });
+  }
+
+  void onTapPlay() {
+    if (playing) {
+      playAnimation.reverse(); // icono play
+      imageDiscoController.stop(); // imagen disco
+      assetAudioPlayer.pause(); // musica
+      playing = false;
+    } else {
+      playAnimation.forward(); // icono play
+      imageDiscoController.repeat(); // imagen disco
+      assetAudioPlayer.play(); // musica
+      playing = true;
+    }
+    notifyListeners();
+  }
+
+  void onTapTrack() {
+    playAnimation.forward(); // icono play
+    imageDiscoController.repeat(); // imagen disco
+    assetAudioPlayer.play(); // musica
+    playing = true;
+    notifyListeners();
+  }
+
+  void addSong(Song song) {
+    deletedSongs.remove(song);
+    songs.insert(0, song);
+    _currentSong = 0;
+    notifyListeners();
+  }
+
+  void deleteSong(Song song) {
+    songs.remove(song);
+    deletedSongs.insert(0, song);
+    _currentSong = 0;
+    notifyListeners();
   }
 }
