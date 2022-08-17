@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/src/helpers/motomami_disk.dart';
@@ -96,31 +98,29 @@ class AudioPlayerModel with ChangeNotifier {
     listeners();
   }
 
-  // late final StreamSubscription<Duration> durationListener;
-  // late final StreamSubscription<Playing?> playingListener;
-  // late final StreamSubscription<Playing> playingStateListener;
-
   void onPressedMultiselectButton() {
-    // durationListener.cancel();
-    // playingListener.cancel();
-    // playingStateListener.cancel();
-
     assetAudioPlayer.stop();
     currentSong = 0;
   }
 
   void listeners() {
-    // durationListener =
+    // no puedo poner un notifiListeners dentro del listener de duration,
+    // porque la aplicación se pilla al tiempo por notificar tantas veces
+    final periodicTimer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        notifyListeners();
+      },
+    );
+
     assetAudioPlayer.currentPosition.listen((duration) {
       current = duration;
     });
 
-    //   playingListener =
     assetAudioPlayer.current.listen((playingAudio) {
       songDuration = playingAudio?.audio.duration ?? const Duration(seconds: 0);
     });
 
-    // playingStateListener =
     assetAudioPlayer.playlistAudioFinished.listen((event) {
       _currentSong++;
     });
