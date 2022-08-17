@@ -25,12 +25,10 @@ packages:
   assets_audio_player:
     dependency: "direct main"
     description:
-      path: "."
-      ref: master
-      resolved-ref: "620b679c14e2f9057faee262184cfe27697d7d7a"
-      url: "https://github.com/luis901101/Flutter-AssetsAudioPlayer.git"
-    source: git
-    version: "3.0.4+2"
+      name: assets_audio_player
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.5"
   assets_audio_player_web:
     dependency: transitive
     description:

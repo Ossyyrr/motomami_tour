@@ -18,7 +18,10 @@ class Track extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final audioPlayerModel = Provider.of<AudioPlayerModel>(context);
-    bool isSelected = audioPlayerModel.currentSong == index;
+    final songSelector = BlocProvider.of<SongSelectorBloc>(context, listen: false);
+
+    bool isSelected = (audioPlayerModel.currentSong == index) && (!songSelector.state.isMultiSelect);
+
     return GestureDetector(
       onTap: () {
         final songSelector = BlocProvider.of<SongSelectorBloc>(context, listen: false);

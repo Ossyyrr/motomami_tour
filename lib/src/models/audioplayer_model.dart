@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/src/helpers/motomami_disk.dart';
@@ -8,13 +10,12 @@ class AudioPlayerModel with ChangeNotifier {
   AudioPlayerModel() {
     songs = getMotomamiSongs();
     deletedSongs = getTourSongs();
-    listeners();
   }
   late final List<Song> songs;
   late final List<Song> deletedSongs;
 
   int _currentSong = 0;
-  final assetAudioPlayer = AssetsAudioPlayer();
+  var assetAudioPlayer = AssetsAudioPlayer();
   bool _playing = false;
   Duration _songDuration = const Duration(milliseconds: 0);
   Duration _current = const Duration(milliseconds: 0);
@@ -53,7 +54,7 @@ class AudioPlayerModel with ChangeNotifier {
   Duration get current => _current;
   set current(Duration valor) {
     _current = valor;
-    notifyListeners();
+    //  notifyListeners();
   }
 
   String printDuration(Duration duration) {
@@ -89,15 +90,29 @@ class AudioPlayerModel with ChangeNotifier {
     for (var song in songs) {
       audios.add(Audio(song.mp3));
     }
-
     assetAudioPlayer.open(
       Playlist(audios: audios),
       loopMode: LoopMode.playlist,
       autoStart: false,
     );
+    listeners();
+  }
+
+  void onPressedMultiselectButton() {
+    assetAudioPlayer.stop();
+    currentSong = 0;
   }
 
   void listeners() {
+    // no puedo poner un notifiListeners dentro del listener de duration,
+    // porque la aplicación se pilla al tiempo por notificar tantas veces
+    final periodicTimer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        notifyListeners();
+      },
+    );
+
     assetAudioPlayer.currentPosition.listen((duration) {
       current = duration;
     });
@@ -107,7 +122,7 @@ class AudioPlayerModel with ChangeNotifier {
     });
 
     assetAudioPlayer.playlistAudioFinished.listen((event) {
-      _currentSong = currentSong + 1;
+      _currentSong++;
     });
   }
 
