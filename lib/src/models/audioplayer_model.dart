@@ -8,7 +8,6 @@ class AudioPlayerModel with ChangeNotifier {
   AudioPlayerModel() {
     songs = getMotomamiSongs();
     deletedSongs = getTourSongs();
-    listeners();
   }
   late final List<Song> songs;
   late final List<Song> deletedSongs;
@@ -53,7 +52,7 @@ class AudioPlayerModel with ChangeNotifier {
   Duration get current => _current;
   set current(Duration valor) {
     _current = valor;
-    notifyListeners();
+    //  notifyListeners();
   }
 
   String printDuration(Duration duration) {
@@ -94,17 +93,34 @@ class AudioPlayerModel with ChangeNotifier {
       loopMode: LoopMode.playlist,
       autoStart: false,
     );
+    listeners();
+  }
+
+  // late final StreamSubscription<Duration> durationListener;
+  // late final StreamSubscription<Playing?> playingListener;
+  // late final StreamSubscription<Playing> playingStateListener;
+
+  void onPressedMultiselectButton() {
+    // durationListener.cancel();
+    // playingListener.cancel();
+    // playingStateListener.cancel();
+
+    assetAudioPlayer.stop();
+    currentSong = 0;
   }
 
   void listeners() {
+    // durationListener =
     assetAudioPlayer.currentPosition.listen((duration) {
       current = duration;
     });
 
+    //   playingListener =
     assetAudioPlayer.current.listen((playingAudio) {
       songDuration = playingAudio?.audio.duration ?? const Duration(seconds: 0);
     });
 
+    // playingStateListener =
     assetAudioPlayer.playlistAudioFinished.listen((event) {
       _currentSong++;
     });
