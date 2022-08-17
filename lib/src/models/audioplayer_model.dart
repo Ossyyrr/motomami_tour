@@ -14,7 +14,7 @@ class AudioPlayerModel with ChangeNotifier {
   late final List<Song> deletedSongs;
 
   int _currentSong = 0;
-  final assetAudioPlayer = AssetsAudioPlayer();
+  var assetAudioPlayer = AssetsAudioPlayer();
   bool _playing = false;
   Duration _songDuration = const Duration(milliseconds: 0);
   Duration _current = const Duration(milliseconds: 0);
@@ -89,7 +89,6 @@ class AudioPlayerModel with ChangeNotifier {
     for (var song in songs) {
       audios.add(Audio(song.mp3));
     }
-
     assetAudioPlayer.open(
       Playlist(audios: audios),
       loopMode: LoopMode.playlist,
@@ -107,7 +106,7 @@ class AudioPlayerModel with ChangeNotifier {
     });
 
     assetAudioPlayer.playlistAudioFinished.listen((event) {
-      _currentSong = currentSong + 1;
+      _currentSong++;
     });
   }
 
