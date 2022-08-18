@@ -9,6 +9,7 @@ class AudioPlayerProvider with ChangeNotifier {
   AudioPlayerProvider() {
     songs = getMotomamiSongs();
     deletedSongs = getTourSongs();
+    listeners();
   }
   late final List<Song> songs;
   late final List<Song> deletedSongs;
@@ -18,11 +19,6 @@ class AudioPlayerProvider with ChangeNotifier {
   bool _playing = false;
 
   late AnimationController playAnimation;
-
-  // String get songTotalDuration => printDuration(songDuration);
-  // String get currentSecond => printDuration(current);
-
-  // double get porcentaje => (songDuration.inSeconds > 0) ? _current.inSeconds / _songDuration.inSeconds : 0;
 
   late AnimationController _imageDiscoController;
   AnimationController get imageDiscoController => _imageDiscoController;
@@ -42,29 +38,6 @@ class AudioPlayerProvider with ChangeNotifier {
     _playing = valor;
     notifyListeners();
   }
-
-  // Duration get songDuration => _songDuration;
-  // set songDuration(Duration valor) {
-  //   _songDuration = valor;
-  //   notifyListeners();
-  // }
-
-  // Duration get current => _current;
-  // set current(Duration valor) {
-  //   _current = valor;
-  //   //  notifyListeners();
-  // }
-
-  // String printDuration(Duration duration) {
-  //   String twoDigits(int n) {
-  //     if (n >= 10) return "$n";
-  //     return "0$n";
-  //   }
-
-  //   String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-  //   String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-  //   return "$twoDigitMinutes:$twoDigitSeconds";
-  // }
 
   List<Song> getMotomamiSongs() {
     List<Song> songList = [];
@@ -93,7 +66,6 @@ class AudioPlayerProvider with ChangeNotifier {
       loopMode: LoopMode.playlist,
       autoStart: false,
     );
-    listeners();
   }
 
   void onPressedMultiselectButton() {
@@ -102,25 +74,8 @@ class AudioPlayerProvider with ChangeNotifier {
   }
 
   void listeners() {
-    // no puedo poner un notifiListeners dentro del listener de duration,
-    // porque la aplicación se pilla al tiempo por notificar tantas veces
-    // final periodicTimer = Timer.periodic(
-    //   const Duration(seconds: 1),
-    //   (timer) {
-    //     notifyListeners();
-    //   },
-    // );
-
-    // assetAudioPlayer.currentPosition.listen((duration) {
-    //   current = duration;
-    // });
-
-    // assetAudioPlayer.current.listen((playingAudio) {
-    //   songDuration = playingAudio?.audio.duration ?? const Duration(seconds: 0);
-    // });
-
     assetAudioPlayer.playlistAudioFinished.listen((event) {
-      _currentSong++;
+      currentSong++;
     });
   }
 
