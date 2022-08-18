@@ -1,6 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:music_player/src/models/audioplayer_model.dart';
+import 'package:music_player/src/models/audioplayer_provider.dart';
 import 'package:provider/provider.dart';
 
 class DiscoImage extends StatelessWidget {
@@ -10,7 +10,7 @@ class DiscoImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final audioPlayerModel = Provider.of<AudioPlayerModel>(context);
+    final audioPlayerProvider = Provider.of<AudioPlayerProvider>(context);
     return Container(
       padding: const EdgeInsets.all(20),
       width: 250,
@@ -25,7 +25,7 @@ class DiscoImage extends StatelessWidget {
               infinite: true,
               manualTrigger: true,
               animate: false,
-              controller: (animationController) => audioPlayerModel.imageDiscoController = animationController,
+              controller: (animationController) => audioPlayerProvider.imageDiscoController = animationController,
               child: const Image(image: AssetImage('assets/motomami.jpeg')),
             ),
             Container(

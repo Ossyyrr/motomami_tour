@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/src/bloc/song_selector_bloc.dart';
-import 'package:music_player/src/models/audioplayer_model.dart';
+import 'package:music_player/src/models/audioplayer_provider.dart';
 import 'package:music_player/src/models/song_model.dart';
 import 'package:provider/provider.dart';
 
@@ -17,10 +17,10 @@ class Track extends StatelessWidget {
   final bool isDeletedSong;
   @override
   Widget build(BuildContext context) {
-    final audioPlayerModel = Provider.of<AudioPlayerModel>(context);
+    final audioPlayerProvider = Provider.of<AudioPlayerProvider>(context);
     final songSelector = BlocProvider.of<SongSelectorBloc>(context, listen: false);
 
-    bool isSelected = (audioPlayerModel.currentSong == index) && (!songSelector.state.isMultiSelect);
+    bool isSelected = (audioPlayerProvider.currentSong == index) && (!songSelector.state.isMultiSelect);
 
     return GestureDetector(
       onTap: () {
@@ -28,15 +28,15 @@ class Track extends StatelessWidget {
 
         if (songSelector.state.isMultiSelect) {
           if (isDeletedSong) {
-            audioPlayerModel.addSong(song);
+            audioPlayerProvider.addSong(song);
           } else {
-            audioPlayerModel.deleteSong(song);
+            audioPlayerProvider.deleteSong(song);
           }
         } else {
-          final audioPlayerModel = Provider.of<AudioPlayerModel>(context, listen: false);
-          audioPlayerModel.currentSong = index;
-          audioPlayerModel.assetAudioPlayer.playlistPlayAtIndex(index);
-          audioPlayerModel.onTapTrack();
+          final audioPlayerProvider = Provider.of<AudioPlayerProvider>(context, listen: false);
+          audioPlayerProvider.currentSong = index;
+          audioPlayerProvider.assetAudioPlayer.playlistPlayAtIndex(index);
+          audioPlayerProvider.onTapTrack();
         }
       },
       child: AnimatedScale(

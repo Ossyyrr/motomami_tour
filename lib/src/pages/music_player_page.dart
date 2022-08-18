@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/src/bloc/song_selector_bloc.dart';
-import 'package:music_player/src/models/audioplayer_model.dart';
+import 'package:music_player/src/models/audioplayer_provider.dart';
 import 'package:music_player/src/widgets/background.dart';
 import 'package:music_player/src/widgets/disco_image.dart';
 import 'package:music_player/src/widgets/lyrics.dart';
@@ -20,7 +20,7 @@ class MusicPlayerPage extends StatelessWidget {
     return Scaffold(body: SafeArea(
       child: BlocBuilder<SongSelectorBloc, SongSelectorState>(
         builder: (context, state) {
-          final audioPlayerModel = Provider.of<AudioPlayerModel>(context);
+          final audioPlayerProvider = Provider.of<AudioPlayerProvider>(context);
           return Stack(
             children: [
               Column(
@@ -35,11 +35,11 @@ class MusicPlayerPage extends StatelessWidget {
                           if (state is ActiveMultiselectState)
                             GridZone(
                               key: const ValueKey('grid'),
-                              audioPlayerModel: audioPlayerModel,
+                              audioPlayerProvider: audioPlayerProvider,
                             ),
                           if (state is DeactiveMultiselectState)
                             _DiscZone(
-                              audioPlayerModel: audioPlayerModel,
+                              audioPlayerProvider: audioPlayerProvider,
                               key: const ValueKey('disc'), //Evita que se genere una nueva instancia del widget
                             ),
                         ],
@@ -98,10 +98,10 @@ class _ForCamilo extends StatelessWidget {
 class _DiscZone extends StatelessWidget {
   const _DiscZone({
     Key? key,
-    required this.audioPlayerModel,
+    required this.audioPlayerProvider,
   }) : super(key: key);
 
-  final AudioPlayerModel audioPlayerModel;
+  final AudioPlayerProvider audioPlayerProvider;
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +114,7 @@ class _DiscZone extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const DiscoImage(),
-              TitleTrack(songs: audioPlayerModel.songs),
+              TitleTrack(songs: audioPlayerProvider.songs),
             ],
           ),
           const SizedBox(),
@@ -135,10 +135,10 @@ class _DiscZone extends StatelessWidget {
 class GridZone extends StatelessWidget {
   const GridZone({
     Key? key,
-    required this.audioPlayerModel,
+    required this.audioPlayerProvider,
   }) : super(key: key);
 
-  final AudioPlayerModel audioPlayerModel;
+  final AudioPlayerProvider audioPlayerProvider;
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +155,7 @@ class GridZone extends StatelessWidget {
               direction: Axis.vertical,
               spacing: 12,
               runSpacing: 12,
-              children: audioPlayerModel.deletedSongs
+              children: audioPlayerProvider.deletedSongs
                   .asMap()
                   .map(
                     (i, song) => MapEntry(

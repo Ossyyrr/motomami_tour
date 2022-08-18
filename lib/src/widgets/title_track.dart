@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/src/models/audioplayer_model.dart';
+import 'package:music_player/src/models/audioplayer_provider.dart';
 import 'package:music_player/src/models/song_model.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +13,7 @@ class TitleTrack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final audioPlayerModel = Provider.of<AudioPlayerModel>(context);
+    final audioPlayerProvider = Provider.of<AudioPlayerProvider>(context);
 
     return Column(
       children: [
@@ -33,7 +33,7 @@ class TitleTrack extends StatelessWidget {
               ),
               Center(
                 child: Text(
-                  songs[audioPlayerModel.currentSong].title,
+                  songs[audioPlayerProvider.currentSong].title,
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 26, fontWeight: FontWeight.bold),
                 ),
