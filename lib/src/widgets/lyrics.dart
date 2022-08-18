@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/src/models/audioplayer_model.dart';
+import 'package:music_player/src/models/audioplayer_provider.dart';
 import 'package:provider/provider.dart';
 
 class Lyrics extends StatelessWidget {
@@ -9,13 +9,13 @@ class Lyrics extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final audioPlayerModel = Provider.of<AudioPlayerModel>(context);
+    final audioPlayerProvider = Provider.of<AudioPlayerProvider>(context);
 
     return ListWheelScrollView(
         physics: const BouncingScrollPhysics(),
         itemExtent: 40,
         diameterRatio: 2,
-        children: audioPlayerModel.songs[audioPlayerModel.currentSong].lyrics
+        children: audioPlayerProvider.songs[audioPlayerProvider.currentSong].lyrics
             .map((linea) => SizedBox(
                   width: double.infinity,
                   child: Padding(
